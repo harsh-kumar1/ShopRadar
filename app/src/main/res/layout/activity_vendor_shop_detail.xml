@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".VendorShopDetail">
+    <ScrollView
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+       >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Title -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Shop Information"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:paddingBottom="8dp"/>
+
+            <!-- Shop Name -->
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editShopName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter your shop name"
+
+                android:padding="12dp"
+                android:layout_marginBottom="12dp"/>
+
+            <!-- Shop Description -->
+            <EditText
+                android:id="@+id/editShopDescription"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:hint="Describe your shop"
+
+                android:padding="12dp"
+                android:gravity="top"
+                android:layout_marginBottom="12dp"/>
+
+            <!-- Shop Address -->
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editShopAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter shop address"
+
+                android:padding="12dp"
+                android:layout_marginBottom="12dp"/>
+
+            <!-- Contact Number -->
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editContactNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter contact number"
+                android:inputType="phone"
+
+                android:padding="12dp"
+                android:layout_marginBottom="12dp"/>
+
+            <!-- Business Hours -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp"
+                android:weightSum="2">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editOpeningTime"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:hint="Opening Time"
+                    android:inputType="time"
+                    android:padding="12dp"
+                    android:layout_marginEnd="8dp"/>
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editClosingTime"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:hint="Closing Time"
+                    android:inputType="time"
+
+                    android:padding="12dp"/>
+            </LinearLayout>
+
+            <!-- Shop Photos -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Shop Photos"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:paddingBottom="8dp"/>
+
+            <!-- Upload Area -->
+            <LinearLayout
+                android:id="@+id/photoUploadArea"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="@drawable/dotted_border"
+                android:padding="24dp"
+                android:layout_marginBottom="16dp">
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@android:drawable/ic_menu_camera"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Upload up to 5 photos"
+                    android:textColor="@android:color/darker_gray"
+                    android:paddingTop="8dp"/>
+
+                <Button
+                    android:id="@+id/btnChooseFiles"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Choose Files"
+                    android:layout_marginTop="8dp"/>
+            </LinearLayout>
+
+            <!-- Image Preview Section -->
+            <LinearLayout
+                android:id="@+id/imagePreviewContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginBottom="24dp"/>
+
+            <!-- Save and Continue Button -->
+            <Button
+                android:id="@+id/btnSaveAndContinue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Save and Continue"
+
+
+                android:padding="12dp"/>
+        </LinearLayout>
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
