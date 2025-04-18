@@ -11,7 +11,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.shopradar2.ModelClass.ShopDetail;
+
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,39 +91,77 @@ public class VendorShopDetail extends AppCompatActivity {
 
 
 
-    private String getRealPathFromURI(Uri contentUri) {
-        String[] proj = {MediaStore.Images.Media.DATA};
-        Cursor cursor = getContentResolver().query(contentUri, proj, null, null, null);
-        if (cursor != null && cursor.moveToFirst()) {
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            String path = cursor.getString(column_index);
-            cursor.close();
-            return path;
+    private String getRealPathFromURI(Uri uri) {
+        try {
+            InputStream inputStream = getContentResolver().openInputStream(uri);
+            if (inputStream == null) return null;
+
+            File tempFile = new File(getCacheDir(), System.currentTimeMillis() + ".jpg");
+            OutputStream outputStream = new FileOutputStream(tempFile);
+            byte[] buffer = new byte[1024];
+            int length;
+
+            while ((length = inputStream.read(buffer)) > 0) {
+                outputStream.write(buffer, 0, length);
+            }
+
+            outputStream.close();
+            inputStream.close();
+
+            return tempFile.getAbsolutePath();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
         }
-        return null;
     }
+
 
     private void uploadShopDetails(List<Uri> imageUris) {
         ApiService apiService = ApiClient.getClient().create(ApiService.class);
 
-        RequestBody shopName = RequestBody.create(MediaType.parse("text/plain"), this.shopName.getText().toString());
-        RequestBody description = RequestBody.create(MediaType.parse("text/plain"), this.shopDesc.getText().toString());
-        RequestBody address = RequestBody.create(MediaType.parse("text/plain"), this.shopLoc.getText().toString());
-        RequestBody contactNumber = RequestBody.create(MediaType.parse("text/plain"), this.txtMobile.getText().toString());
-        RequestBody openingTime = RequestBody.create(MediaType.parse("text/plain"), this.shopOpening.getText().toString());
-
-        RequestBody closingTime = RequestBody.create(MediaType.parse("text/plain"), this.shopClosing.getText().toString());
+        String shopNam = this.shopName.getText().toString();
+        String description = this.shopDesc.getText().toString();
+        String address = this.shopLoc.getText().toString();
+        String contactNumber = this.txtMobile.getText().toString();
+        String  openingTime = this.shopOpening.getText().toString();
+        String closingTime = this.shopClosing.getText().toString();
+        RequestBody namePart = RequestBody.create(MultipartBody.FORM, shopNam);
+        RequestBody descPart = RequestBody.create(MultipartBody.FORM, description);
+        RequestBody addressPart = RequestBody.create(MultipartBody.FORM, address);
+        RequestBody contactPart = RequestBody.create(MultipartBody.FORM, contactNumber);
+        RequestBody openPart = RequestBody.create(MultipartBody.FORM, openingTime);
+        RequestBody closePart = RequestBody.create(MultipartBody.FORM, closingTime);
 
 //
 //, photoParts
-        Call<ResponseBody> call = apiService.createShop(shopName, description, address, contactNumber, openingTime, closingTime);
+        List<MultipartBody.Part> photoParts=new ArrayList<>();;
+        for (Uri uri : imageUris) {
+            String realPath = getRealPathFromURI(uri);
+            if (realPath != null) {
+                File file = new File(realPath);
+                RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), file);
+                MultipartBody.Part body = MultipartBody.Part.createFormData("photos", file.getName(), requestFile);
+                photoParts.add(body);
+            }
+            System.out.println("real path "+realPath);
+        }
+
+        System.out.println("Total images selected: " + imageUris.size());
+
+        System.out.println("This is the photo part "+photoParts);
+        Call<ResponseBody> call = apiService.createShop(
+                namePart, descPart, addressPart, contactPart, openPart, closePart, photoParts
+        );
+
 
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
+                    System.out.println("This is the succcessful  message"+response+ "   "+response.message());
                     Toast.makeText(getApplicationContext(), "Shop uploaded successfully!", Toast.LENGTH_SHORT).show();
                 } else {
+                    System.out.println("This is the message"+response+ "   "+response.message());
                     Toast.makeText(getApplicationContext(), "Upload failed: " + response.message(), Toast.LENGTH_LONG).show();
                 }
             }
@@ -125,8 +169,13 @@ public class VendorShopDetail extends AppCompatActivity {
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Toast.makeText(getApplicationContext(), "Error: " + t.getMessage(), Toast.LENGTH_LONG).show();
+
             }
+
+
         });
     }
+
+
 
 }

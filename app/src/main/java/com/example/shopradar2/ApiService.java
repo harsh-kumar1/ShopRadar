@@ -1,5 +1,7 @@
 package com.example.shopradar2;
 
+import com.example.shopradar2.ModelClass.ShopDetail;
+
 import java.util.List;
 
 import okhttp3.MultipartBody;
@@ -13,15 +15,15 @@ import retrofit2.http.Part;
 public interface ApiService {
 
     @Multipart
-    @POST("/api/shops/create")
+    @POST("/api/shopDetails/create")
     Call<ResponseBody> createShop(
             @Part("shopName") RequestBody shopName,
             @Part("description") RequestBody description,
             @Part("address") RequestBody address,
             @Part("contactNumber") RequestBody contactNumber,
             @Part("openingTime") RequestBody openingTime,
-            @Part("closingTime") RequestBody closingTime
-//            @Part List<MultipartBody.Part> photos
+            @Part("closingTime") RequestBody closingTime,
+            @Part List<MultipartBody.Part> photos
     );
 
 
