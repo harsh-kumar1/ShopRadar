@@ -19,10 +19,11 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
 
-                android:layout_marginRight="15dp"
 
+
+
+                android:background="@drawable/search_bar_bg"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:padding="8dp">
@@ -113,13 +114,13 @@
                 android:layout_height="wrap_content"
                 android:text="Nearby Stores"
                 android:textStyle="bold"
-                android:textSize="18sp"
+                android:textSize="24dp"
                 android:layout_marginTop="24dp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/storeRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginTop="8dp" />
 

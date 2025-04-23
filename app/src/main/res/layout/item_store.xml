@@ -1,21 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="150dp"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="12dp"
         android:orientation="vertical"
         android:background="@drawable/card_bg"
         android:padding="8dp">
 
+<!--        <ImageView-->
+<!--            android:background="@drawable/cornered_image"-->
+<!--            android:id="@+id/storeImage"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="180dp"-->
+<!--            android:scaleType="centerCrop"-->
+
+    <androidx.cardview.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:layout_width="220dp"
+        android:layout_height="180dp"
+        card_view:cardCornerRadius="16dp"
+        card_view:cardElevation="4dp"
+        >
+
         <ImageView
             android:id="@+id/storeImage"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:scaleType="centerCrop"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop" />
+    </androidx.cardview.widget.CardView>
 
 
-          />
+    />
 
         <TextView
             android:textAlignment="center"

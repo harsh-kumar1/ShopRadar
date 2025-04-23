@@ -1,4 +1,4 @@
-package com.example.shopradar2;
+package com.example.shopradar2.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,10 +15,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-import com.example.shopradar2.Fragments.HomeFragment;
+import com.example.shopradar2.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -34,11 +31,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.concurrent.Executor;
 
 public class Login extends  AppCompatActivity {
 
@@ -88,7 +80,6 @@ public class Login extends  AppCompatActivity {
         });
 
         loginButton.setOnClickListener(v -> loginUser());
-
 
         findViewById(R.id.google_login).setOnClickListener(new View.OnClickListener() {
 

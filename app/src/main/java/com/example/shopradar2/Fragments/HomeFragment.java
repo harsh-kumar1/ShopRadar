@@ -8,44 +8,37 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.Manifest;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.shopradar2.Activities.Login;
 import com.example.shopradar2.Adapter.ProductAdapter;
-import com.example.shopradar2.Adapter.StoreAdapter;
+import com.example.shopradar2.Adapter.ShopAdapter;
+import com.example.shopradar2.AddProductApiClient;
+import com.example.shopradar2.AddProductApiService;
 import com.example.shopradar2.LocationCallback;
 import com.example.shopradar2.LocationHelper;
 
-import com.example.shopradar2.Login;
-import com.example.shopradar2.ModelClass.Product;
+import com.example.shopradar2.ModelClass.ShopDetail;
+import com.example.shopradar2.ModelClass.ShopProduct;
 import com.example.shopradar2.R;
 import com.example.shopradar2.ReverseGeocoding;
+import com.example.shopradar2.ShopDetailApiClient;
+import com.example.shopradar2.ShopDetailApiService;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
 
-import org.json.JSONObject;
-import android.os.Handler;
-import android.os.Looper;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class HomeFragment extends Fragment {
 
@@ -56,6 +49,9 @@ public class HomeFragment extends Fragment {
     private TextView locationTextView, locationCoordinate;
     private FusedLocationProviderClient fusedLocationProviderClient;
     private GoogleSignInClient mGoogleSignInClient;
+    ShopAdapter shopAdapter;
+    ProductAdapter productAdapter;
+
 
     public HomeFragment() {
         // Required empty public constructor
@@ -87,11 +83,7 @@ public class HomeFragment extends Fragment {
             public void onLocationResult(double latitude, double longitude) {
                 ReverseGeocoding geocoding= new ReverseGeocoding();
                 locationTextView.setVisibility(View.VISIBLE);
-
-
-
-
-              ReverseGeocoding.getAddress(latitude, longitude, address -> {
+                ReverseGeocoding.getAddress(latitude, longitude, address -> {
                   // This runs on UI thread
                   Log.d("ReverseGeocoding", "Address: " + address);
                   locationTextView.setText(address);
@@ -99,6 +91,7 @@ public class HomeFragment extends Fragment {
               });
                 locationCoordinate.setText("Lat: " + latitude + "  Lng: " + longitude);
               locationProgressBar.setVisibility(View.GONE);
+              fetchShops(25.7549226,82.949191);
 
           }
 
@@ -126,20 +119,121 @@ public class HomeFragment extends Fragment {
         productRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
 
         // Dummy store data
-        List<String> storeList = Arrays.asList("Store 1", "Store 2", "Store 3");
-        storeRecyclerView.setAdapter(new StoreAdapter(storeList));
 
-        // Dummy product data
-        List<Product> productList = new ArrayList<>();
-        productList.add(new Product("Product 1", 4.5f, 200, "Rs. 1000"));
-        productList.add(new Product("Product 2", 4.0f, 150, "Rs. 1580"));
 
-        productRecyclerView.setAdapter(new ProductAdapter(productList));
 
 
 
         return view;
     }
+    private void fetchShops(double latitude, double longitude) {
+        List<String> shopIds = new ArrayList<>();
+
+        ShopDetailApiService apiService = ShopDetailApiClient.getClient().create(ShopDetailApiService.class);
+
+        Call<List<ShopDetail>> call = apiService.getNearbyShops(latitude, longitude);
+
+        // 🔍 Print the exact API URL being called
+        System.out.println("API Request URL: " + call.request().url());
+
+        call.enqueue(new Callback<List<ShopDetail>>() {
+            @Override
+            public void onResponse(Call<List<ShopDetail>> call, Response<List<ShopDetail>> response) {
+                System.out.println("This is the reponse body :"+response.body());
+                if (response.isSuccessful() && response.body() != null) {
+                    List<ShopDetail> shopList = response.body();
+                    String backendBaseUrl = "http://172.11.9.212:8080/api/shopDetails/";
+
+                    // Debug log: check the first shop's raw photoPaths value
+                    if (!shopList.isEmpty()) {
+                        System.out.println("First shop raw photoPath: " + shopList.get(0));
+                    }
+                    String firstPath="";
+
+                    for (ShopDetail shop : shopList) {
+                        shopIds.add(String.valueOf(shop.getShopId()));
+                        
+                        String rawPhotos= shop.getPhotoPaths();
+                        if (rawPhotos != null && !rawPhotos.trim().isEmpty()) {
+                            String[] splitPaths = rawPhotos.split(",");
+                            if (splitPaths.length > 0) {
+                              firstPath = splitPaths[0].trim(); // Extract just the file name
+
+                            }
+                        }
+
+
+//                        if (rawPhotos != null && !rawPhotos.trim().isEmpty()) {
+//                            String[] splitPaths = rawPhotos.split(",");
+//                            if (splitPaths.length > 0) {
+//                                shop.setPhotoPaths(splitPaths[0].trim()); // Set the first image URL only
+//                            }
+//                        } else {
+//                            System.out.println("No photos for: " + shop.getShopName());
+//                            shop.setPhotoPaths(""); // or set a default image URL if needed
+//                        }
+                    }
+
+                    shopAdapter = new ShopAdapter(getContext(), shopList,backendBaseUrl + "upload/" + firstPath);
+                    storeRecyclerView.setAdapter(shopAdapter);
+
+                    fetchProducts(shopIds);
+
+                } else {
+                    System.out.println("Response failed: " + response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ShopDetail>> call, Throwable t) {
+                Log.e("API_CALL", "Failed to fetch shops", t);
+            }
+        });
+    }
+    private void fetchProducts(List<String> shopIds){
+        AddProductApiService apiService= AddProductApiClient.getClient().create(AddProductApiService.class);
+        Call<List<ShopProduct>> call= apiService.getProducts(shopIds);
+
+        call.enqueue(new Callback<List<ShopProduct>>(){
+            @Override
+            public void onResponse(Call<List<ShopProduct>>call, Response<List<ShopProduct>>response){
+                if(response.isSuccessful()&&response.body()!=null){
+                    List<ShopProduct> productList=response.body();
+                    String backendBaseUrl = "http://172.11.9.212:8080/api/shopDetails/";
+
+                    if(!productList.isEmpty()){
+                        System.out.println("adfsa"+productList.get(0).getPhotoPath());
+
+                    }
+                    String firstPath="";
+
+                    for(ShopProduct product:productList){
+                        String rawPhotos= product.getPhotoPath();
+
+                        if(rawPhotos!=null&&!rawPhotos.trim().isEmpty()){
+                            String[] splitPaths= rawPhotos.split(",");
+                            if(splitPaths.length>0){
+                                firstPath= splitPaths[0].trim();
+
+                            }
+                        }
+                    }
+                    System.out.println("This is from homF"+backendBaseUrl + "upload/" + firstPath);
+                    productAdapter= new ProductAdapter(getContext(),productList,backendBaseUrl + "upload/" + firstPath);
+                    productRecyclerView.setAdapter(productAdapter);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ShopProduct>> call, Throwable t) {
+                Log.e("API_CALL", "Failed to fetch shops", t);
+
+            }
+
+        });
+    }
+
+
 
 
 

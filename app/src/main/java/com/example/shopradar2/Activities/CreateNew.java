@@ -1,4 +1,4 @@
-package com.example.shopradar2;
+package com.example.shopradar2.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +12,8 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.shopradar2.R;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -197,7 +199,8 @@ public class CreateNew extends AppCompatActivity {
     }
 
     private void registerUser() {
-        // Validate inputs
+
+//        // Validate inputs
         if (!validateInputs()) {
             return;
         }
@@ -224,6 +227,8 @@ public class CreateNew extends AppCompatActivity {
                             } else if (selectedRole.equals("Vendor")) {
                                 Intent intent = new Intent(this, VendorShopDetail.class);
                                 intent.putExtra("role","Vendor");
+                                intent.putExtra("shopName",shopNameEditText.getText().toString());
+                                intent.putExtra("mobile",phoneEditText.getText().toString());
                                 startActivity(intent);
                                 finish();
 
@@ -234,6 +239,8 @@ public class CreateNew extends AppCompatActivity {
 
                     } else {
                         Toast.makeText(this, "Failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                        termsCheckBox.setChecked(false);
+
                     }
                 });
 
