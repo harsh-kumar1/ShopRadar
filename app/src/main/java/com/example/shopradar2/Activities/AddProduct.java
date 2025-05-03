@@ -118,7 +118,7 @@ public class AddProduct extends AppCompatActivity {
         startActivityForResult(Intent.createChooser(intent, "Select Pictures"), PICK_IMAGES_REQUEST);
     }
     private void clearFields() {
-
+        imageUris.clear();
         etName.setText("");
         etPrice.setText("");
         etDescription.setText("");

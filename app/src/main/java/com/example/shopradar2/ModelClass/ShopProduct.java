@@ -19,6 +19,16 @@ public class ShopProduct {
 
     private String photoPath;
 
+    public String getSinglePhoto() {
+        return singlePhoto;
+    }
+
+    public void setSinglePhoto(String singlePhoto) {
+        this.singlePhoto = singlePhoto;
+    }
+
+    private String singlePhoto;
+
     public Long getShopId() {
         return shopId;
     }

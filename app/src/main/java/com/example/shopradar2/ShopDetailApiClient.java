@@ -9,7 +9,7 @@ public class ShopDetailApiClient {
     public static Retrofit getClient() {
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()
-                    .baseUrl("http://172.11.9.212:8080/")
+                    .baseUrl("http://172.11.8.235:8080/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }

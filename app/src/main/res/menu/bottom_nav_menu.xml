@@ -6,15 +6,15 @@
         android:icon="@drawable/img"
         android:title="Home" />
     <item
-        android:id="@+id/nav_search"
-        android:icon="@drawable/img"
-        android:title="Search" />
+        android:id="@+id/nav_discover"
+        android:icon="@drawable/ic_discover"
+        android:title="Disvover" />
     <item
-        android:id="@+id/nav_notifications"
-        android:icon="@drawable/img"
-        android:title="Notifications" />
+        android:id="@+id/nav_order"
+        android:icon="@drawable/ic_order"
+        android:title="Order" />
     <item
-        android:id="@+id/nav_about"
-        android:icon="@drawable/img"
-        android:title="About" />
+        android:id="@+id/nav_account"
+        android:icon="@drawable/ic_account"
+        android:title="Account" />
 </menu>

@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.example.shopradar2.Fragments.DiscoverPage;
 import com.example.shopradar2.Fragments.HomeFragment;
 import com.example.shopradar2.LocationHelper;
 import com.example.shopradar2.R;
@@ -61,13 +62,12 @@ public class MainActivity extends AppCompatActivity{
             Fragment selectedFragment = null;
 
             if (item.getItemId() == R.id.nav_home) {
-
-
                 selectedFragment = new HomeFragment();
             }
-//            else if (item.getItemId() == R.id.nav_search) {
-//                selectedFragment = new CarSearchFragment();
-//            } else if (item.getItemId() == R.id.nav_notifications) {
+            else if (item.getItemId() == R.id.nav_discover) {
+                selectedFragment = new DiscoverPage();
+            }
+//            else if (item.getItemId() == R.id.nav_notifications) {
 //                selectedFragment = new NotificationFragment();
 //            } else if (item.getItemId() == R.id.nav_about) {
 //                selectedFragment = new AboutFragment();

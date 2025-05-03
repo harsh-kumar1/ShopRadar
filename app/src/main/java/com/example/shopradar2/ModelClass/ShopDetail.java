@@ -22,6 +22,15 @@ public class ShopDetail {
     @SerializedName("photo_paths")
     private String photoPaths;
 
+    public String getSinglePhoto() {
+        return singlePhoto;
+    }
+
+    public void setSinglePhoto(String singlePhoto) {
+        this.singlePhoto = singlePhoto;
+    }
+
+    private String singlePhoto;
 
     public ShopDetail(Long shopId, String shopName, String description, String address, String contactNumber, String openingTime, String closingTime, String photoPaths) {
         this.shopId = shopId;

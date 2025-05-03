@@ -22,12 +22,11 @@ public class ShopAdapter extends RecyclerView.Adapter<ShopAdapter.ViewHolder> {
 
     private Context context;
     private List<ShopDetail> shopList;
-    private  String fileName;
 
-    public ShopAdapter(Context context, List<ShopDetail> shopList,String fileName) {
+    public ShopAdapter(Context context, List<ShopDetail> shopList) {
         this.context = context;
         this.shopList = shopList;
-        this.fileName= fileName;
+
     }
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView shopImage;
@@ -44,21 +43,16 @@ public class ShopAdapter extends RecyclerView.Adapter<ShopAdapter.ViewHolder> {
         View view = LayoutInflater.from(context).inflate(R.layout.item_store, parent, false);
         return new ViewHolder(view);
     }
-
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ShopDetail shop = shopList.get(position);
         holder.shopName.setText(shop.getShopName());
-
         Glide.with(context)
-                .load(fileName)
+                .load(shop.getSinglePhoto())
                 .placeholder(R.drawable.ic_launcher_background)
                 .apply(RequestOptions.bitmapTransform(new RoundedCorners(30)))
                 .into(holder.shopImage);
     }
-
-
-
     @Override
     public int getItemCount() {
         return shopList.size();

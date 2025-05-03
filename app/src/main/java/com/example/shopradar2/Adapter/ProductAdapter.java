@@ -21,13 +21,13 @@ import java.util.List;
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
     private List<ShopProduct> productList;
     private Context context;
-    private  String fileName;
 
 
 
-    public ProductAdapter(Context context,List<ShopProduct> productList,String fileName) {
+
+    public ProductAdapter(Context context,List<ShopProduct> productList) {
         this.context= context;
-        this.fileName= fileName;
+
         this.productList = productList;
     }
 
@@ -42,13 +42,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
         ShopProduct product = productList.get(position);
         holder.productName.setText(product.getName());
-        holder.productPrice.setText(product.getPrice());
+        holder.productPrice.setText("Rs. "+product.getPrice());
         holder.productRating.setText("4.5");
-        System.out.println("This is from adapter"+fileName);
-
 
         Glide.with(context)
-                .load(fileName)
+                .load(product.getSinglePhoto())
                 .placeholder(R.drawable.ic_launcher_background)
                 .apply(RequestOptions.bitmapTransform(new RoundedCorners(30)))
                 .into(holder.productImage);
