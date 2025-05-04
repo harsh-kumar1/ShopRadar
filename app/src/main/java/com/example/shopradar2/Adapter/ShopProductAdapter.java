@@ -1,5 +1,8 @@
 package com.example.shopradar2.Adapter;
 
+import static java.security.AccessController.getContext;
+
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
@@ -12,6 +15,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.shopradar2.ModelClass.ShopProduct;
 import com.example.shopradar2.R;
 
@@ -19,6 +25,8 @@ import java.util.List;
 
 public class ShopProductAdapter extends RecyclerView.Adapter<ShopProductAdapter.ShopProductViewHolder>{
     private List<ShopProduct> productList;
+    private Context context;
+
 
 
 
@@ -34,8 +42,9 @@ public class ShopProductAdapter extends RecyclerView.Adapter<ShopProductAdapter.
         }
 
     }
-    public ShopProductAdapter(List<ShopProduct> products) {
+    public ShopProductAdapter(Context context,List<ShopProduct> products) {
         this.productList = products;
+        this.context = context;
     }
     @Override
     public ShopProductViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -53,7 +62,13 @@ public class ShopProductAdapter extends RecyclerView.Adapter<ShopProductAdapter.
             holder.image.setImageURI(p.getImageUris().get(0)); // Just showing first image
         }
         else {
-            holder.image.setImageResource(R.drawable.store_placeholher); // Optional placeholder
+
+            Glide.with(context)
+                    .load(p.getSinglePhoto())
+                    .placeholder(R.drawable.ic_launcher_background)
+                    .apply(RequestOptions.bitmapTransform(new RoundedCorners(30)))
+                    .into(holder.image);
+            // Optional placeholder
         }
     }
     @Override

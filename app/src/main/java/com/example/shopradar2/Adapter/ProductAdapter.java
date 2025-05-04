@@ -8,11 +8,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.shopradar2.Fragments.ProductDetailFragment;
 import com.example.shopradar2.ModelClass.ShopProduct;
 import com.example.shopradar2.R;
 
@@ -51,7 +53,16 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
                 .apply(RequestOptions.bitmapTransform(new RoundedCorners(30)))
                 .into(holder.productImage);
 
-        // Load image with Glide/Picasso if needed
+        holder.itemView.setOnClickListener(v -> {
+            ProductDetailFragment fragment = ProductDetailFragment.newInstance(product);
+
+            if (context instanceof FragmentActivity) {
+                ((FragmentActivity) context).getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, fragment)
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
     }
 
     @Override

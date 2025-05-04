@@ -34,7 +34,6 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 public class Login extends  AppCompatActivity {
 
-
     private static final String TAG = "GoogleActivity";
     private static final int RC_SIGN_IN = 9001;
     private FirebaseAuth mAuth;
@@ -165,14 +164,11 @@ public class Login extends  AppCompatActivity {
                         startActivity(new Intent(Login.this, MainActivity .class));
                         finish();
                     } else {
+
                         Toast.makeText(Login.this, "Login Failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
-
-
-
-
 
 
     private void updateUI(FirebaseUser user) {

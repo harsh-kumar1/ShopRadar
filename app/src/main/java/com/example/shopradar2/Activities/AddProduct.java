@@ -73,7 +73,7 @@ public class AddProduct extends AppCompatActivity {
 
 
         productList = new ArrayList<>();
-        adapter = new ShopProductAdapter(productList);
+        adapter = new ShopProductAdapter(this,productList);
         // ... later in onCreate
 
         recyclerViewProduct.setAdapter(adapter);

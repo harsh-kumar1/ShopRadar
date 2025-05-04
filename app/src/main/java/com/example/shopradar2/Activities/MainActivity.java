@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.shopradar2.Fragments.DiscoverPage;
 import com.example.shopradar2.Fragments.HomeFragment;
+import com.example.shopradar2.Fragments.OrdersFragment;
 import com.example.shopradar2.LocationHelper;
 import com.example.shopradar2.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -66,6 +67,9 @@ public class MainActivity extends AppCompatActivity{
             }
             else if (item.getItemId() == R.id.nav_discover) {
                 selectedFragment = new DiscoverPage();
+            }
+            else if(item.getItemId()== R.id.nav_order){
+                selectedFragment= new OrdersFragment();
             }
 //            else if (item.getItemId() == R.id.nav_notifications) {
 //                selectedFragment = new NotificationFragment();

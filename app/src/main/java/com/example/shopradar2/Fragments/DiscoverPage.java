@@ -62,6 +62,8 @@ public class DiscoverPage extends Fragment {
     private RecyclerView recyclerView;
 
     private List<ShopDetail> shopList;
+    private List<ShopProduct> productList;
+
     private StoreAdapter storeAdapter;
     private SharedViewModel sharedViewModel;
 
@@ -98,6 +100,7 @@ public class DiscoverPage extends Fragment {
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
         shopList = sharedViewModel.getShopList().getValue();
 
+        productList= sharedViewModel.getProductList().getValue();
 
 
         latitude = sharedViewModel.getLatitude();
@@ -150,7 +153,7 @@ public class DiscoverPage extends Fragment {
 
 
 
-        storeAdapter = new StoreAdapter(getContext(), shopList,  new StoreAdapter.OnStoreClickListener() {
+        storeAdapter = new StoreAdapter(getContext(), latitude,longitude,shopList,productList,  new StoreAdapter.OnStoreClickListener() {
             @Override
             public void onStoreClick(ShopDetail shop) {
                 String address= shop.getAddress();
@@ -210,7 +213,7 @@ public class DiscoverPage extends Fragment {
 //        addShopMarkers();
 //    }
 
-    private double calculateHaversineDistance(double lat1, double lon1, double lat2, double lon2) {
+    public double calculateHaversineDistance(double lat1, double lon1, double lat2, double lon2) {
         final int R = 6371;
         double latDistance = Math.toRadians(lat2 - lat1);
         double lonDistance = Math.toRadians(lon2 - lon1);
@@ -354,11 +357,20 @@ public class DiscoverPage extends Fragment {
 
         productsRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
+        List<ShopProduct> tempProductList= new ArrayList<>();
+
+        for (ShopProduct product : productList) {
+            if (product.getShopId().equals(shop.getShopId())) {
+                tempProductList.add(product);
+            }
+        }
 
 
-//        ShopProductAdapter productAdapter = new ShopProductAdapter(shop.getProducts());
 
-//        productsRecyclerView.setAdapter(productAdapter);
+
+        ShopProductAdapter productAdapter = new ShopProductAdapter(getContext(),tempProductList);
+
+        productsRecyclerView.setAdapter(productAdapter);
 
         showRouteButton.setOnClickListener(v -> {
             fetchRouteToShop(shop,shopLatitude,shopLongitude);

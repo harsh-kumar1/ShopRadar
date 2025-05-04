@@ -4,10 +4,11 @@ import android.net.Uri;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShopProduct {
+public class ShopProduct  implements Serializable {
     @SerializedName("name")
     private String name;
     @SerializedName("category")
